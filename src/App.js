@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "./services/api";
 
 import "./styles.css";
@@ -6,6 +6,20 @@ import "./styles.css";
 function App() {
 
   const [repositories, setRespositories] = useState([]);
+
+  useEffect(() => {
+    fetchRepositories();
+  }, [])
+  
+  async function fetchRepositories() {
+    try {
+      const { data } = await api.get('/repositories');
+
+      setRespositories(data);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   async function handleAddRepository() {
     try {
@@ -42,7 +56,7 @@ function App() {
 
             <button onClick={() => handleRemoveRepository(repository.id)}>
               Remover
-          </button>
+            </button>
           </li>
         ))}
       </ul>
